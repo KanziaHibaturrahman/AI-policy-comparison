@@ -192,6 +192,50 @@ nav.scrolled { border-bottom-color:var(--border); }
 .chip.na      { border-color:var(--border); color:var(--gray); background:var(--light); }
 .mono-cell    { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--gray); }
 
+/* ——— EXPANDABLE ROW ——— */
+.expandable-row { cursor:pointer; }
+.expandable-row:hover { background:var(--light); }
+.expandable-row .ct-label { color:var(--black); font-weight:500; }
+.expand-hint { font-size:0.7rem; color:var(--gray); margin-left:0.3rem; transition:transform 0.2s; display:inline-block; }
+
+/* ——— TIER EXPANSION PANEL ——— */
+.tier-expansion {
+  border:1px solid var(--border); border-top:none;
+  background:var(--white); padding:0;
+  grid-column: 1 / -1;
+}
+.tier-exp-topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 1.4rem; border-bottom:1px solid var(--border);
+  background:var(--black);
+}
+.tier-exp-title { font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.7); }
+.tier-exp-close { font-size:0.75rem; color:rgba(255,255,255,0.5); background:transparent; border:none; cursor:pointer; letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; }
+.tier-exp-close:hover { color:#fff; }
+
+.tier-exp-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:0; }
+.tier-exp-col { border-right:1px solid var(--border); padding:0; }
+.tier-exp-col:last-child { border-right:none; }
+
+.tier-exp-header { padding:1rem 1.2rem; border-bottom:1px solid var(--border); background:var(--light); display:flex; flex-direction:column; gap:0.2rem; }
+.tier-exp-flag { font-size:1.2rem; }
+.tier-exp-name { font-size:0.82rem; font-weight:500; }
+.tier-exp-count { font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray); }
+
+.tier-exp-note { padding:1.2rem; font-size:0.78rem; line-height:1.7; color:#555; font-style:italic; }
+
+.tier-exp-tier { border-bottom:1px solid var(--border); padding:1.2rem; }
+.tier-exp-tier:last-child { border-bottom:none; }
+.tier-exp-tier-header { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.8rem; flex-wrap:wrap; }
+.tier-exp-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.tier-exp-tier-name { font-size:0.82rem; font-weight:500; }
+.tier-exp-badge { font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--gray); border:1px solid var(--border); padding:0.15rem 0.5rem; margin-left:auto; white-space:nowrap; }
+
+.tier-exp-block { margin-bottom:0.7rem; }
+.tier-exp-block:last-child { margin-bottom:0; }
+.tier-exp-label { font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray); margin-bottom:0.25rem; }
+.tier-exp-text { font-size:0.75rem; line-height:1.65; color:#444; }
+
 /* ——— PROFILE CARDS ——— */
 .profile-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:2px; }
 .profile-card { padding:1.4rem; background:var(--light); transition:background 0.2s; }
