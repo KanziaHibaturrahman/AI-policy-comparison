@@ -3,19 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>lex.ai — Global AI Law Explorer</title>
+  <title>govern.ai — Global AI Law Explorer</title>
   <meta name="description" content="Read, compare, and track every official AI law enacted across jurisdictions — EU, South Korea, Vietnam, Kazakhstan, and Japan."/>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-  <!-- Cursor -->
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursor-ring"></div>
 
-  <!-- Nav -->
   <nav id="nav">
-    <a class="nav-logo" href="#hero">lex<em>.ai</em></a>
+    <a class="nav-logo" href="#hero">govern<em>.ai</em></a>
     <ul class="nav-links">
       <li><a href="#hero">Home</a></li>
       <li><a href="#explorer" id="nav-explorer">Explorer</a></li>
@@ -24,7 +22,6 @@
     </ul>
   </nav>
 
-  <!-- Hero -->
   <section id="hero">
     <div class="hero-left">
       <p class="hero-tag">Global AI Legislation Tracker</p>
@@ -40,105 +37,64 @@
       </div>
     </div>
     <div class="hero-right">
-      <div class="hero-globe">
-        <svg viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="400" cy="200" rx="380" ry="180" stroke="#0a0a0a" stroke-width="1"/>
-          <ellipse cx="400" cy="200" rx="280" ry="180" stroke="#0a0a0a" stroke-width="0.5"/>
-          <ellipse cx="400" cy="200" rx="160" ry="180" stroke="#0a0a0a" stroke-width="0.5"/>
-          <line x1="20" y1="200" x2="780" y2="200" stroke="#0a0a0a" stroke-width="0.5"/>
-          <line x1="400" y1="20" x2="400" y2="380" stroke="#0a0a0a" stroke-width="0.5"/>
-          <line x1="20" y1="130" x2="780" y2="130" stroke="#0a0a0a" stroke-width="0.3"/>
-          <line x1="20" y1="270" x2="780" y2="270" stroke="#0a0a0a" stroke-width="0.3"/>
-          <!-- country dots -->
-          <circle cx="480" cy="155" r="5" fill="#e63b2e"/><!-- EU -->
-          <circle cx="640" cy="155" r="5" fill="#e63b2e"/><!-- Korea -->
-          <circle cx="615" cy="190" r="5" fill="#e63b2e"/><!-- Vietnam -->
-          <circle cx="560" cy="148" r="5" fill="#e63b2e"/><!-- Kazakhstan -->
-          <circle cx="660" cy="160" r="5" fill="#e63b2e"/><!-- Japan -->
-        </svg>
+      <div class="hero-stat">
+        <div class="hero-stat-num">5</div>
+        <div class="hero-stat-label">Jurisdictions tracked</div>
       </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-num">5</div>
-          <div class="hero-stat-label">Jurisdictions tracked</div>
-        </div>
-        <div class="hero-divider"></div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">15</div>
-          <div class="hero-stat-label">Comparison dimensions</div>
-        </div>
-        <div class="hero-divider"></div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">2026</div>
-          <div class="hero-stat-label">Most recent enactment</div>
-        </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">15</div>
+        <div class="hero-stat-label">Comparison dimensions</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">2026</div>
+        <div class="hero-stat-label">Most recent enactment</div>
       </div>
       <div class="hero-vertical">Regulation · Rights · Compliance</div>
     </div>
   </section>
 
-  <!-- App shell: sidebar + dynamic main -->
   <div class="app-shell" id="explorer">
-
     <aside class="sidebar">
       <div class="sidebar-section">Jurisdictions</div>
-      <a class="nav-item" href="#" data-view="overview" data-law="eu">
-        <span class="nav-flag">🇪🇺</span> European Union
-      </a>
-      <a class="nav-item" href="#" data-view="overview" data-law="kr">
-        <span class="nav-flag">🇰🇷</span> South Korea
-      </a>
-      <a class="nav-item" href="#" data-view="overview" data-law="vn">
-        <span class="nav-flag">🇻🇳</span> Vietnam
-      </a>
-      <a class="nav-item" href="#" data-view="overview" data-law="kz">
-        <span class="nav-flag">🇰🇿</span> Kazakhstan
-      </a>
-      <a class="nav-item" href="#" data-view="overview" data-law="jp">
-        <span class="nav-flag">🇯🇵</span> Japan
-      </a>
+      <a class="nav-item" href="#" data-view="overview" data-law="eu"><span class="nav-flag">🇪🇺</span> European Union</a>
+      <a class="nav-item" href="#" data-view="overview" data-law="kr"><span class="nav-flag">🇰🇷</span> South Korea</a>
+      <a class="nav-item" href="#" data-view="overview" data-law="vn"><span class="nav-flag">🇻🇳</span> Vietnam</a>
+      <a class="nav-item" href="#" data-view="overview" data-law="kz"><span class="nav-flag">🇰🇿</span> Kazakhstan</a>
+      <a class="nav-item" href="#" data-view="overview" data-law="jp"><span class="nav-flag">🇯🇵</span> Japan</a>
 
       <div class="sidebar-section">Views</div>
       <a class="nav-item" href="#" data-view="compare">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
-          <rect x="1" y="1" width="6" height="6" rx="1"/>
-          <rect x="9" y="1" width="6" height="6" rx="1"/>
-          <rect x="1" y="9" width="6" height="6" rx="1"/>
-          <rect x="9" y="9" width="6" height="6" rx="1"/>
+          <rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/>
+          <rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/>
         </svg>
         Compare all
       </a>
       <a class="nav-item" href="#" data-view="timeline">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
-          <line x1="2" y1="4" x2="14" y2="4"/>
-          <line x1="2" y1="8" x2="14" y2="8"/>
-          <line x1="2" y1="12" x2="10" y2="12"/>
+          <line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="10" y2="12"/>
         </svg>
         Timeline
       </a>
     </aside>
 
-    <main class="main-content" id="main-content">
-      <!-- Rendered by app.js -->
-    </main>
-
+    <main class="main-content" id="main-content"></main>
   </div>
 
   <footer>
-    <span>lex.ai — Global AI Law Explorer</span>
+    <span>govern.ai — Global AI Law Explorer</span>
     <span>Data current as of March 2026</span>
-    <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    <a href="https://github.com/KanziaHibaturrahman/AI-policy-comparison" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
   </footer>
 
-  <!-- Data files (order matters — compare.js last) -->
   <script src="data/eu.js"></script>
   <script src="data/kr.js"></script>
   <script src="data/vn.js"></script>
   <script src="data/kz.js"></script>
   <script src="data/jp.js"></script>
   <script src="data/compare.js"></script>
-
-  <!-- App logic -->
   <script src="app.js"></script>
 
 </body>
