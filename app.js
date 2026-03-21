@@ -3,7 +3,7 @@
 (function () {
   'use strict';
 
-  const state = { view: 'overview', law: 'eu', compareFilter: 'all' };
+  const state = { view: 'overview', law: 'eu', compareFilter: 'all', tierExpanded: false };
 
   const LAWS = {
     eu: () => window.LAW_EU,
@@ -46,7 +46,7 @@
     'In force': 'The date the law officially became legally effective.',
     'Legally binding': 'Whether the law creates enforceable legal obligations with penalties for non-compliance.',
     'Extraterritorial': 'Whether the law applies to companies outside the country if their AI affects citizens within it.',
-    'Risk tiers': 'Whether the law classifies AI systems into different risk categories with different obligations for each.',
+    'Risk tiers': 'Click to expand a full breakdown of each risk tier across all jurisdictions.',
     'Prohibitions': 'Whether the law outright bans certain AI practices regardless of safeguards.',
     'GPAI covered': 'Whether general-purpose AI models (like large language models) are explicitly regulated.',
     'Transparency req.': 'Whether AI systems must disclose that they are AI, or explain their decisions to users.',
@@ -98,97 +98,33 @@
     if (tip) tip.style.display = 'none';
   }
 
-  // ——— TIER DETAIL BUILDER ———
+  // ——— TIER DETAIL BUILDER (overview page) ———
   const TIER_DETAILS = {
     eu: {
-      'Unacceptable risk': {
-        criteria: 'Poses a clear threat to fundamental rights, democracy, or safety. Covers: social scoring by public authorities, subliminal manipulation, exploitation of vulnerable groups, real-time biometric identification in public spaces, emotion recognition in workplaces or schools, and AI inferring race, political opinion, or sexual orientation.',
-        implementation: 'Outright ban — no exemptions. Applies from 2 February 2025.',
-        examples: 'Social credit systems, police facial recognition in public, ad targeting based on inferred political beliefs.',
-      },
-      'High risk': {
-        criteria: 'AI used as safety components in products under EU harmonisation law, OR AI in Annex III areas: critical infrastructure, education, employment, essential services, law enforcement, migration, justice, democratic processes.',
-        implementation: 'Requires risk management system, data governance, technical documentation, user transparency, human oversight, and conformity assessment before deployment.',
-        examples: 'AI CV screening tools, credit scoring models, medical diagnostic AI, border control AI, predictive policing tools.',
-      },
-      'Limited risk': {
-        criteria: 'AI systems that interact directly with humans (chatbots), generate synthetic content (deepfakes), or perform emotion recognition or biometric categorisation.',
-        implementation: 'Must disclose to users that they are interacting with AI. Deepfakes must be labelled. No pre-market approval required.',
-        examples: 'Customer service chatbots, AI-generated images and video, emotion detection in marketing.',
-      },
-      'Minimal risk': {
-        criteria: 'All other AI systems not falling into higher categories. The vast majority of commercial AI products fall here.',
-        implementation: 'No mandatory obligations. Providers may voluntarily adopt codes of conduct.',
-        examples: 'Spam filters, AI in video games, recommendation algorithms, AI-assisted writing tools.',
-      },
+      'Unacceptable risk': { criteria: 'Poses a clear threat to fundamental rights, democracy, or safety. Covers: social scoring by public authorities, subliminal manipulation, exploitation of vulnerable groups, real-time biometric identification in public spaces, emotion recognition in workplaces or schools, and AI inferring race, political opinion, or sexual orientation.', implementation: 'Outright ban — no exemptions. Applies from 2 February 2025.', examples: 'Social credit systems, police facial recognition in public, ad targeting based on inferred political beliefs.' },
+      'High risk': { criteria: 'AI used as safety components in products under EU harmonisation law, OR AI in Annex III areas: critical infrastructure, education, employment, essential services, law enforcement, migration, justice, democratic processes.', implementation: 'Requires risk management system, data governance, technical documentation, user transparency, human oversight, and conformity assessment before deployment.', examples: 'AI CV screening tools, credit scoring models, medical diagnostic AI, border control AI, predictive policing tools.' },
+      'Limited risk': { criteria: 'AI systems that interact directly with humans (chatbots), generate synthetic content (deepfakes), or perform emotion recognition or biometric categorisation.', implementation: 'Must disclose to users that they are interacting with AI. Deepfakes must be labelled. No pre-market approval required.', examples: 'Customer service chatbots, AI-generated images and video, emotion detection in marketing.' },
+      'Minimal risk': { criteria: 'All other AI systems not falling into higher categories. The vast majority of commercial AI products fall here.', implementation: 'No mandatory obligations. Providers may voluntarily adopt codes of conduct.', examples: 'Spam filters, AI in video games, recommendation algorithms, AI-assisted writing tools.' },
     },
     kr: {
-      'High-impact AI': {
-        criteria: 'AI systems designated by MSIT that significantly affect citizens\' fundamental rights, safety, or livelihood. Factors: number of users, irreversibility of harm, degree of replacement of human judgment.',
-        implementation: 'Mandatory safety measures, user disclosure, technical documentation, and incident notification to MSIT.',
-        examples: 'Medical diagnosis AI, financial loan decision systems, hiring AI, public benefit allocation.',
-      },
-      'General AI': {
-        criteria: 'AI systems in commercial or public services that do not meet the high-impact designation threshold.',
-        implementation: 'Standard transparency disclosures and basic documentation. No pre-market approval.',
-        examples: 'Customer service AI, content recommendation systems, business productivity tools.',
-      },
-      'Exempt': {
-        criteria: 'AI used exclusively for national security, pure academic research with no commercial deployment, or personal non-commercial use.',
-        implementation: 'No obligations. Commercial use of research AI removes the exemption.',
-        examples: 'Military AI systems, university research models, personal hobby projects.',
-      },
+      'High-impact AI': { criteria: 'AI systems designated by MSIT that significantly affect citizens\' fundamental rights, safety, or livelihood. Factors: number of users, irreversibility of harm, degree of replacement of human judgment.', implementation: 'Mandatory safety measures, user disclosure, technical documentation, and incident notification to MSIT.', examples: 'Medical diagnosis AI, financial loan decision systems, hiring AI, public benefit allocation.' },
+      'General AI': { criteria: 'AI systems in commercial or public services that do not meet the high-impact designation threshold.', implementation: 'Standard transparency disclosures and basic documentation. No pre-market approval.', examples: 'Customer service AI, content recommendation systems, business productivity tools.' },
+      'Exempt': { criteria: 'AI used exclusively for national security, pure academic research with no commercial deployment, or personal non-commercial use.', implementation: 'No obligations. Commercial use of research AI removes the exemption.', examples: 'Military AI systems, university research models, personal hobby projects.' },
     },
     vn: {
-      'Prohibited uses': {
-        criteria: 'AI systems threatening national sovereignty, territorial integrity, social order, or manipulating political opinion.',
-        implementation: 'Outright ban. Violations subject to criminal and administrative penalties under Chapter VII.',
-        examples: 'AI political disinformation systems, foreign propaganda AI, surveillance tools used against dissidents.',
-      },
-      'Conditional use': {
-        criteria: 'AI deployed in healthcare, financial services, education, and public administration.',
-        implementation: 'Requires prior registration and ministerial approval. Ongoing audit and reporting obligations.',
-        examples: 'AI medical diagnostic tools, algorithmic credit scoring, AI in government service delivery.',
-      },
-      'General use': {
-        criteria: 'All other commercial and consumer AI systems operating in Vietnam.',
-        implementation: 'Transparency obligations, data protection compliance, and environmental impact reporting under Article 11.',
-        examples: 'E-commerce recommendation AI, customer service chatbots, AI content creation tools.',
-      },
+      'Prohibited uses': { criteria: 'AI systems threatening national sovereignty, territorial integrity, social order, or manipulating political opinion.', implementation: 'Outright ban. Violations subject to criminal and administrative penalties under Chapter VII.', examples: 'AI political disinformation systems, foreign propaganda AI, surveillance tools used against dissidents.' },
+      'Conditional use': { criteria: 'AI deployed in healthcare, financial services, education, and public administration.', implementation: 'Requires prior registration and ministerial approval. Ongoing audit and reporting obligations. Environmental reporting under Article 11.', examples: 'AI medical diagnostic tools, algorithmic credit scoring, AI in government service delivery.' },
+      'General use': { criteria: 'All other commercial and consumer AI systems operating in Vietnam.', implementation: 'Transparency obligations, data protection compliance, and environmental impact reporting under Article 11.', examples: 'E-commerce recommendation AI, customer service chatbots, AI content creation tools.' },
     },
     kz: {
-      'High-risk AI': {
-        criteria: 'AI used in public administration, law enforcement, financial services, and healthcare as defined by Ministry of DSE.',
-        implementation: 'Mandatory registration with Ministry of DSE before deployment. Requires technical documentation, accredited risk assessment, and human oversight description.',
-        examples: 'Government decision-making AI, law enforcement analytics, bank credit AI, hospital diagnostic systems.',
-      },
-      'Limited risk': {
-        criteria: 'AI systems that interact directly with citizens in service contexts — chatbots, automated call systems, AI-powered public portals.',
-        implementation: 'Must disclose AI nature to users. Transparency and notification obligations apply.',
-        examples: 'Government chatbots, automated customer service lines, citizen-facing AI portals.',
-      },
-      'General use': {
-        criteria: 'Commercial AI systems with no direct citizen interaction and outside high-risk sectors.',
-        implementation: 'Basic documentation and responsible use principles. No registration required.',
-        examples: 'Internal business AI tools, research applications, AI-assisted software development.',
-      },
+      'High-risk AI': { criteria: 'AI used in public administration, law enforcement, financial services, and healthcare as defined by Ministry of DSE.', implementation: 'Mandatory registration with Ministry of DSE before deployment. Requires technical documentation, accredited risk assessment, and human oversight description.', examples: 'Government decision-making AI, law enforcement analytics, bank credit AI, hospital diagnostic systems.' },
+      'Limited risk': { criteria: 'AI systems that interact directly with citizens in service contexts — chatbots, automated call systems, AI-powered public portals.', implementation: 'Must disclose AI nature to users. Transparency and notification obligations apply.', examples: 'Government chatbots, automated customer service lines, citizen-facing AI portals.' },
+      'General use': { criteria: 'Commercial AI systems with no direct citizen interaction and outside high-risk sectors.', implementation: 'Basic documentation and responsible use principles. No registration required.', examples: 'Internal business AI tools, research applications, AI-assisted software development.' },
     },
     jp: {
-      'Strategic coordination': {
-        criteria: 'Government-level coordination — R&D investment planning, international standards participation, cross-ministry strategy. No private sector obligations.',
-        implementation: 'Cabinet Office formulates a Basic Plan. Government ministries coordinate AI policy across sectors.',
-        examples: 'National AI strategy documents, Japan\'s OECD participation, government R&D grants.',
-      },
-      'Voluntary guidelines': {
-        criteria: 'All private AI developers and deployers in Japan. These are best-practice guidelines, not binding rules.',
-        implementation: '"Shall make efforts to" language throughout — no penalties for non-compliance.',
-        examples: 'AI safety disclosures, transparency documentation, bias testing — all voluntary.',
-      },
-      'Sandbox regime': {
-        criteria: 'Companies applying to test innovative AI systems outside existing regulatory frameworks.',
-        implementation: 'Fast-track approval with limited liability. Time-bound testing. Over 40 companies participated as of early 2026.',
-        examples: 'Autonomous vehicle AI on public roads, AI medical devices in trials, AI in financial products.',
-      },
+      'Strategic coordination': { criteria: 'Government-level coordination — R&D investment planning, international standards participation, cross-ministry strategy. No private sector obligations.', implementation: 'Cabinet Office formulates a Basic Plan. Government ministries coordinate AI policy across sectors.', examples: 'National AI strategy documents, Japan\'s OECD participation, government R&D grants.' },
+      'Voluntary guidelines': { criteria: 'All private AI developers and deployers in Japan. These are best-practice guidelines, not binding rules.', implementation: '"Shall make efforts to" language throughout — no penalties for non-compliance.', examples: 'AI safety disclosures, transparency documentation, bias testing — all voluntary.' },
+      'Sandbox regime': { criteria: 'Companies applying to test innovative AI systems outside existing regulatory frameworks.', implementation: 'Fast-track approval with limited liability. Time-bound testing. Over 40 companies participated as of early 2026.', examples: 'Autonomous vehicle AI on public roads, AI medical devices in trials, AI in financial products.' },
     },
   };
 
@@ -197,18 +133,76 @@
     if (!d) return `<p class="tier-detail-text">${tier.desc}</p>`;
     return `
       <div class="tier-detail-grid">
-        <div class="tier-detail-block">
-          <div class="tier-detail-label">What counts as this tier</div>
-          <p class="tier-detail-text">${d.criteria}</p>
+        <div class="tier-detail-block"><div class="tier-detail-label">What counts as this tier</div><p class="tier-detail-text">${d.criteria}</p></div>
+        <div class="tier-detail-block"><div class="tier-detail-label">Implementation</div><p class="tier-detail-text">${d.implementation}</p></div>
+        <div class="tier-detail-block"><div class="tier-detail-label">Examples</div><p class="tier-detail-text">${d.examples}</p></div>
+      </div>
+    `;
+  }
+
+  // ——— RENDER TIER EXPANSION PANEL (compare page) ———
+  function renderTierExpansion() {
+    const data = window.COMPARE_DATA.tierDetails;
+    const keys = ['eu', 'kr', 'vn', 'kz', 'jp'];
+
+    const cols = keys.map(k => {
+      const j = data[k];
+      if (!j) return '';
+
+      if (j.tiers.length === 0) {
+        return `
+          <div class="tier-exp-col">
+            <div class="tier-exp-header">
+              <span class="tier-exp-flag">${j.flag}</span>
+              <span class="tier-exp-name">${j.name}</span>
+              <span class="tier-exp-count">${j.count}</span>
+            </div>
+            <div class="tier-exp-note">${j.note}</div>
+          </div>
+        `;
+      }
+
+      const tiersHtml = j.tiers.map(t => `
+        <div class="tier-exp-tier">
+          <div class="tier-exp-tier-header">
+            <span class="tier-exp-dot" style="background:${t.color}"></span>
+            <span class="tier-exp-tier-name">${t.name}</span>
+            <span class="tier-exp-badge">${t.badge}</span>
+          </div>
+          <div class="tier-exp-block">
+            <div class="tier-exp-label">What qualifies</div>
+            <p class="tier-exp-text">${t.what}</p>
+          </div>
+          <div class="tier-exp-block">
+            <div class="tier-exp-label">Implementation</div>
+            <p class="tier-exp-text">${t.implementation}</p>
+          </div>
+          <div class="tier-exp-block">
+            <div class="tier-exp-label">Examples</div>
+            <p class="tier-exp-text">${t.examples}</p>
+          </div>
         </div>
-        <div class="tier-detail-block">
-          <div class="tier-detail-label">Implementation</div>
-          <p class="tier-detail-text">${d.implementation}</p>
+      `).join('');
+
+      return `
+        <div class="tier-exp-col">
+          <div class="tier-exp-header">
+            <span class="tier-exp-flag">${j.flag}</span>
+            <span class="tier-exp-name">${j.name}</span>
+            <span class="tier-exp-count">${j.count}</span>
+          </div>
+          ${tiersHtml}
         </div>
-        <div class="tier-detail-block">
-          <div class="tier-detail-label">Examples</div>
-          <p class="tier-detail-text">${d.examples}</p>
+      `;
+    }).join('');
+
+    return `
+      <div class="tier-expansion" id="tier-expansion">
+        <div class="tier-exp-topbar">
+          <div class="tier-exp-title">Risk tier breakdown — all jurisdictions</div>
+          <button class="tier-exp-close" id="tier-exp-close">Close ✕</button>
         </div>
+        <div class="tier-exp-grid">${cols}</div>
       </div>
     `;
   }
@@ -237,10 +231,7 @@
     const docsHtml = l.docs.map(d => `
       <a class="doc-link" href="${d.url}" target="_blank" rel="noopener noreferrer">
         <div class="doc-icon">${docIconSvg()}</div>
-        <div>
-          <div class="doc-title">${d.title}</div>
-          <div class="doc-sub">${d.sub}</div>
-        </div>
+        <div><div class="doc-title">${d.title}</div><div class="doc-sub">${d.sub}</div></div>
       </a>
     `).join('');
 
@@ -264,16 +255,10 @@
         <div class="meta-card"><div class="meta-label">Law number</div><div class="meta-val mono">${l.number}</div></div>
         <div class="meta-card"><div class="meta-label">Scope</div><div class="meta-val">${scopeHtml}</div></div>
       </div>
-      <div class="section-header">
-        <div class="section-title">Risk classification</div>
-        <div class="section-line"></div>
-      </div>
+      <div class="section-header"><div class="section-title">Risk classification</div><div class="section-line"></div></div>
       <div class="tier-hint">Click any tier to expand details</div>
       <div class="risk-tiers reveal visible">${tiersHtml}</div>
-      <div class="section-header">
-        <div class="section-title">Official documents</div>
-        <div class="section-line"></div>
-      </div>
+      <div class="section-header"><div class="section-title">Official documents</div><div class="section-line"></div></div>
       <div class="doc-grid reveal visible">${docsHtml}</div>
     `;
   }
@@ -328,6 +313,7 @@
     const keys = ['eu','kr','vn','kz','jp'];
     const filter = state.compareFilter;
     const allowedSections = FILTER_SECTIONS[filter];
+
     const heads = [
       { flag:'🇪🇺', name:'European Union', year:'Reg. 2024/1689', ap:'risk' },
       { flag:'🇰🇷', name:'South Korea',    year:'Law 20676',      ap:'risk' },
@@ -345,12 +331,21 @@
         <div class="ct-sh">${sec.label}</div>
         <div class="ct-sh ct-sh-fill"></div>
       </div>
-      ${sec.rows.map(row => `
-        <div class="ct-row">
-          <div class="ct-label has-tip" data-tip="${(DIM_TOOLTIPS[row.label]||'').replace(/"/g,'&quot;')}">${row.label}</div>
-          ${keys.map(k=>`<div class="ct-cell">${chipHtml(row[k])}</div>`).join('')}
-        </div>
-      `).join('')}
+      ${sec.rows.map(row => {
+        const isExpandable = row.expandable;
+        const expandClass = isExpandable ? ' expandable-row' : '';
+        const expandAttr  = isExpandable ? ' data-expandable="tiers"' : '';
+        const tipText = (DIM_TOOLTIPS[row.label]||'').replace(/"/g,'&quot;');
+        return `
+          <div class="ct-row${expandClass}"${expandAttr}>
+            <div class="ct-label has-tip" data-tip="${tipText}">
+              ${row.label}${isExpandable ? ' <span class="expand-hint">↓</span>' : ''}
+            </div>
+            ${keys.map(k=>`<div class="ct-cell">${chipHtml(row[k])}</div>`).join('')}
+          </div>
+          ${isExpandable && state.tierExpanded ? renderTierExpansion() : ''}
+        `;
+      }).join('')}
     `).join('');
 
     const profileCards = data.profiles.map(p => `
@@ -390,16 +385,13 @@
       </div>
       <div class="ctable">${tableHtml}</div>
       <div style="margin-top:2.5rem">
-        <div class="section-header">
-          <div class="section-title">Jurisdiction profiles</div>
-          <div class="section-line"></div>
-        </div>
+        <div class="section-header"><div class="section-title">Jurisdiction profiles</div><div class="section-line"></div></div>
         <div class="profile-grid">${profileCards}</div>
       </div>
     `;
   }
 
-  // ——— RENDER: TIMELINE (swimlane) ———
+  // ——— RENDER: TIMELINE ———
   function renderTimeline() {
     const events = window.TIMELINE_EVENTS;
     const lanes = ['European Union','South Korea','Vietnam','Kazakhstan','Japan'];
@@ -432,14 +424,8 @@
       }).join('');
       return `
         <div class="tl-lane">
-          <div class="tl-lane-label">
-            <span class="tl-lane-flag">${laneFlags[lane]}</span>
-            <span class="tl-lane-name">${lane}</span>
-          </div>
-          <div class="tl-lane-track">
-            <div class="tl-lane-line"></div>
-            ${dotsHtml}
-          </div>
+          <div class="tl-lane-label"><span class="tl-lane-flag">${laneFlags[lane]}</span><span class="tl-lane-name">${lane}</span></div>
+          <div class="tl-lane-track"><div class="tl-lane-line"></div>${dotsHtml}</div>
         </div>
       `;
     }).join('');
@@ -473,15 +459,19 @@
     setupReveal();
   }
 
+  // ——— INNER EVENTS ———
   function bindInnerEvents() {
+    // Tabs
     document.querySelectorAll('.tab[data-tab]').forEach(tab => {
       tab.addEventListener('click', () => { state.view = tab.dataset.tab; render(); });
     });
 
+    // Filter chips
     document.querySelectorAll('.filter-chip[data-filter]').forEach(chip => {
       chip.addEventListener('click', () => { state.compareFilter = chip.dataset.filter; render(); });
     });
 
+    // TOC links
     document.querySelectorAll('.toc-item[data-ch]').forEach(item => {
       item.addEventListener('click', e => {
         e.preventDefault();
@@ -491,7 +481,7 @@
       });
     });
 
-    // Tier expand/collapse
+    // Overview tier expand/collapse
     document.querySelectorAll('.tier-clickable').forEach(row => {
       row.addEventListener('click', () => {
         const i = row.dataset.tier;
@@ -502,6 +492,29 @@
         if (!isOpen) { detail.style.display='block'; row.classList.add('open'); }
       });
     });
+
+    // Compare page — expandable Risk tiers row
+    document.querySelectorAll('.expandable-row').forEach(row => {
+      row.addEventListener('click', () => {
+        state.tierExpanded = !state.tierExpanded;
+        render();
+        if (state.tierExpanded) {
+          setTimeout(() => {
+            document.getElementById('tier-expansion')?.scrollIntoView({behavior:'smooth',block:'start'});
+          }, 50);
+        }
+      });
+    });
+
+    // Close tier expansion
+    const closeBtn = document.getElementById('tier-exp-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        state.tierExpanded = false;
+        render();
+      });
+    }
 
     // EU scope hover
     const scopeEl = document.querySelector('.scope-hover');
@@ -598,7 +611,7 @@
       requestAnimationFrame(animRing);
     })();
     document.addEventListener('mouseover', e => {
-      const over = e.target.closest('a,button,.nav-item,.tab,.tier-clickable,.ch-card,.ct-row,.filter-chip,.doc-link,.profile-card,.tl-event-dot,.scope-hover,.ct-label');
+      const over = e.target.closest('a,button,.nav-item,.tab,.tier-clickable,.expandable-row,.ch-card,.ct-row,.filter-chip,.doc-link,.profile-card,.tl-event-dot,.scope-hover,.ct-label');
       cursor.style.width = over?'18px':'10px';
       cursor.style.height = over?'18px':'10px';
       ring.style.opacity = over?'0':'0.4';
