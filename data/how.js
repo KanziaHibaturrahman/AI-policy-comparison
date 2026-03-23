@@ -1,0 +1,123 @@
+// data/how.js — How each law works: enforcement mechanics and company compliance
+window.HOW_DATA = [
+  {
+    key: 'eu',
+    flag: '🇪🇺',
+    name: 'European Union',
+    law: 'Reg. 2024/1689 · Enforced by AI Office + National Competent Authorities',
+    steps: [
+      { num: '1', title: 'Classify your AI system', text: 'Determine which of the 4 risk tiers applies using the Annex I and III checklists. Most commercial AI will be minimal risk with no obligations.' },
+      { num: '2', title: 'For high-risk AI: conformity assessment', text: 'Complete an independent conformity assessment before deployment. Establish a risk management system, maintain technical documentation, and implement human oversight mechanisms.' },
+      { num: '3', title: 'Register in EU database', text: 'High-risk AI systems must be registered in the public EU AI database before deployment. This includes system description, intended purpose, and contact details.' },
+      { num: '4', title: 'Ongoing post-market obligations', text: 'Incident reporting for serious incidents, post-market monitoring, and regular review of the risk management system throughout the lifecycle.' },
+      { num: '5', title: 'For GPAI models', text: 'Publish technical documentation, comply with EU copyright law on training data, and report systemic risks if the model exceeds 10^25 FLOPs training compute.' },
+      { num: '6', title: 'For prohibited AI: immediate withdrawal', text: 'Any AI system falling in the unacceptable risk category must be immediately removed from the EU market. No grace period applies — prohibitions have been in force since February 2025.' },
+    ],
+    penalties: [
+      { label: 'Prohibited AI violations', value: '€35M or 7% global revenue', severity: 'high' },
+      { label: 'High-risk AI non-compliance', value: '€15M or 3% global revenue', severity: 'high' },
+      { label: 'Supplying incorrect information', value: '€7.5M or 1.5% global revenue', severity: 'med' },
+      { label: 'SME/startup cap', value: 'Lower of the two thresholds always applies', severity: 'low' },
+      { label: 'Enforced by', value: 'AI Office (GPAI) + 27 National Competent Authorities (high-risk)', severity: 'none' },
+      { label: 'Enforcement timeline', value: 'Prohibitions: Feb 2025 · High-risk: Aug 2026', severity: 'none' },
+    ],
+    sources: [
+      { label: 'EUR-Lex: Full legal text', url: 'https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng' },
+      { label: 'FLI: AI Act Explorer', url: 'https://artificialintelligenceact.eu/ai-act-explorer/' },
+    ],
+  },
+  {
+    key: 'kr',
+    flag: '🇰🇷',
+    name: 'South Korea',
+    law: 'Law No. 20676 · Enforced by Ministry of Science & ICT (MSIT)',
+    steps: [
+      { num: '1', title: 'Monitor MSIT designation gazette', text: 'Watch for MSIT publications designating AI systems as "high-impact." Designation is case-by-case, not category-based — your product may be designated at any time.' },
+      { num: '2', title: 'If designated high-impact: implement safety measures', text: 'Establish reliability and safety measures. Disclose clearly to users that an AI system is being used in services significantly affecting their rights or interests.' },
+      { num: '3', title: 'Maintain technical documentation', text: 'Keep documentation sufficient to demonstrate compliance with the Act. Inspectors from MSIT can request this documentation at any time.' },
+      { num: '4', title: 'Report serious incidents to MSIT', text: 'Notify MSIT of any serious incident involving a high-impact AI system within the required timeframe. The exact timeframe is specified by Presidential Decree.' },
+      { num: '5', title: 'Foreign companies: appoint a domestic agent', text: 'International companies with over ₩1 trillion in revenue, ₩10 billion in AI revenues, or 1 million daily users in Korea must appoint a local legal representative for compliance accountability.' },
+    ],
+    penalties: [
+      { label: 'Maximum fine', value: 'Set by Presidential Decree (not yet published)', severity: 'med' },
+      { label: 'Incident non-reporting', value: 'Administrative penalty', severity: 'high' },
+      { label: 'False documentation', value: 'Criminal liability possible', severity: 'high' },
+      { label: 'Non-appointment of domestic agent', value: 'Administrative penalty', severity: 'med' },
+      { label: 'Enforced by', value: 'Ministry of Science and ICT (MSIT)', severity: 'none' },
+    ],
+    sources: [
+      { label: 'CSET: English translation of AI Basic Act', url: 'https://cset.georgetown.edu/wp-content/uploads/t0625_south_korea_ai_law_EN.pdf' },
+      { label: 'TechPolicy: Analysis and critique', url: 'https://www.techpolicy.press/south-korea-may-regret-being-first-with-new-ai-law/' },
+    ],
+  },
+  {
+    key: 'vn',
+    flag: '🇻🇳',
+    name: 'Vietnam',
+    law: 'Law 134/2025/QH15 · Enforced by Ministry of Science & Technology + Ministry of Information & Communications',
+    steps: [
+      { num: '1', title: 'Classify your AI system into one of 3 tiers', text: 'Determine whether your system falls into unacceptable risk (banned), high risk (conditional approval required), or general use (transparency obligations only).' },
+      { num: '2', title: 'For high-risk AI: obtain ministerial approval', text: 'Register and obtain prior approval from the Ministry of Science & Technology or Ministry of Information & Communications before deployment. Grace periods apply: most systems until March 2027, healthcare/education/finance until September 2027.' },
+      { num: '3', title: 'Label all AI-generated content', text: 'All audio, images, and video generated by AI must carry machine-readable identification markers. Where content could be confused with authentic material, clear user notifications are mandatory.' },
+      { num: '4', title: 'Disclose AI interactions', text: 'Users must be clearly informed when they are interacting with an automated AI system rather than a human agent.' },
+      { num: '5', title: 'Environmental reporting (Article 11)', text: 'Operators of AI infrastructure must report energy consumption and carbon emissions annually — a unique requirement among the five jurisdictions.' },
+      { num: '6', title: 'Appoint a local representative', text: 'Foreign AI providers must appoint a legal representative in Vietnam responsible for registration, inspection, and handling violations — regardless of whether the AI is high-risk.' },
+    ],
+    penalties: [
+      { label: 'Prohibited AI violations', value: 'Criminal + administrative penalties (Chapter VII)', severity: 'high' },
+      { label: 'Unlicensed high-risk AI deployment', value: 'Administrative fine', severity: 'high' },
+      { label: 'Failure to label AI-generated content', value: 'Administrative penalty', severity: 'med' },
+      { label: 'Environmental non-reporting', value: 'Administrative penalty', severity: 'med' },
+      { label: 'Enforced by', value: 'MOST (science/tech AI) + MIC (digital/media AI)', severity: 'none' },
+    ],
+    sources: [
+      { label: 'Duane Morris: Vietnam AI Law full analysis', url: 'https://blogs.duanemorris.com/vietnam/2026/03/03/vietnam-the-first-law-on-artificial-intelligence-what-you-must-know/' },
+      { label: 'Baker McKenzie: Foundation and outlook', url: 'https://www.bakermckenzie.com/en/insight/publications/2026/02/vietnam-artificial-intelligence-law-foundation-and-outlook' },
+    ],
+  },
+  {
+    key: 'kz',
+    flag: '🇰🇿',
+    name: 'Kazakhstan',
+    law: 'Law No. 230-VIII ZPK · Enforced by Ministry of Artificial Intelligence and Digital Development',
+    steps: [
+      { num: '1', title: 'Determine your risk tier', text: 'Assess whether your AI falls into high-risk sectors (public administration, law enforcement, finance, healthcare) or lower-risk categories.' },
+      { num: '2', title: 'For high-risk AI: register before deployment', text: 'Submit a registration application to the Ministry of AI and Digital Development. Must include technical documentation, an independent risk assessment by an accredited body, and a human oversight plan.' },
+      { num: '3', title: 'Disclose AI use to citizens', text: 'Any AI system interacting directly with citizens must clearly disclose its AI nature at the start of interaction. Citizens have the right to request explanations for automated decisions.' },
+      { num: '4', title: 'Label AI-generated media content', text: 'AI-generated content in media — including text, images, audio, and video — must be labelled as AI-generated.' },
+      { num: '5', title: 'Report incidents', text: 'Notify the Ministry of AI and Digital Development of any incident that caused or could have caused material harm to individuals or the state.' },
+    ],
+    penalties: [
+      { label: 'High-risk AI non-registration', value: 'Administrative fine (exact amounts by subordinate decree)', severity: 'high' },
+      { label: 'Failure to disclose AI use to citizens', value: 'Administrative penalty', severity: 'med' },
+      { label: 'Incident non-reporting', value: 'Administrative penalty', severity: 'med' },
+      { label: 'Enforced by', value: 'Ministry of Artificial Intelligence and Digital Development', severity: 'none' },
+    ],
+    sources: [
+      { label: 'Library of Congress: Kazakhstan AI Law', url: 'https://www.loc.gov/item/global-legal-monitor/2026-01-12/kazakhstan-new-law-introduces-rules-for-ai-systems-operating-in-the-country' },
+      { label: 'EY Kazakhstan: Tax & regulatory alert', url: 'https://www.ey.com/en_kz/technical/tax-alerts/2025/12/law-on-artificial-intelligence-kazakhstan' },
+    ],
+  },
+  {
+    key: 'jp',
+    flag: '🇯🇵',
+    name: 'Japan',
+    law: 'AI Promotion Act 2025 · Coordinated by Cabinet Office',
+    note: 'Japan\'s law creates no binding obligations on private companies. All compliance language uses the phrase "shall make efforts to" (努めなければならない) — a standard legislative formula indicating encouragement without legal compulsion. There are no penalties for non-compliance with any provision of the Act.',
+    steps: [
+      { num: '1', title: 'Voluntary: adopt safety guidelines', text: 'AI business operators are encouraged — not required — to develop and provide AI in a safe and secure manner and implement measures to prevent harm to users and third parties.' },
+      { num: '2', title: 'Voluntary: disclose information to users', text: 'Operators are encouraged to disclose necessary information about AI systems to users. No mandatory format or minimum disclosure requirements are specified.' },
+      { num: '3', title: 'Optional: apply for regulatory sandbox', text: 'Companies can apply to test innovative AI systems in Japan\'s regulatory sandbox. Approved participants receive time-limited liability protections. Over 40 companies participated as of early 2026.' },
+      { num: '4', title: 'Optional: participate in standards development', text: 'Operators are invited to contribute to Japan\'s AI standards work through the Cabinet Office AI Strategy Council, which shapes voluntary guidelines and international positions.' },
+    ],
+    penalties: [
+      { label: 'Non-compliance with safety guidelines', value: 'None — all voluntary', severity: 'none' },
+      { label: 'Non-disclosure to users', value: 'None — all voluntary', severity: 'none' },
+      { label: 'No regulator with enforcement powers', value: 'Cabinet Office coordinates; no penalties', severity: 'none' },
+    ],
+    sources: [
+      { label: 'Cabinet Office: AI Promotion Act overview (EN PDF)', url: 'https://www8.cao.go.jp/cstp/ai/ai_hou_gaiyou_en.pdf' },
+      { label: 'Regulations.ai: Japan AI Promotion Act breakdown', url: 'https://regulations.ai/regulations/japan-2025-5-ai-promotion-act' },
+    ],
+  },
+];
