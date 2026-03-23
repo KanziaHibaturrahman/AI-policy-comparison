@@ -446,6 +446,147 @@
     `;
   }
 
+  // ——— RENDER: WHY ———
+  function renderWhy() {
+    const data = window.WHY_DATA;
+
+    const blocksHtml = data.map(j => {
+      const pillsHtml = (j.trigger_pills||[]).map(p =>
+        `<span class="why-pill">${p}</span>`
+      ).join('');
+
+      const politicalHtml = (j.political||[]).map(p =>
+        `<div class="why-point"><div class="why-point-dot" style="background:#2563eb"></div><span>${p}</span></div>`
+      ).join('');
+
+      const economicHtml = (j.economic||[]).map(p =>
+        `<div class="why-point"><div class="why-point-dot" style="background:#2d8c4e"></div><span>${p}</span></div>`
+      ).join('');
+
+      const sourcesHtml = (j.sources||[]).map(s =>
+        `<a class="why-source" href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label} ↗</a>`
+      ).join('');
+
+      const noteHtml = j.note ? `<div class="why-note">${j.note}</div>` : '';
+
+      return `
+        <div class="why-block">
+          <div class="why-block-header">
+            <div class="why-flag">${j.flag}</div>
+            <div>
+              <div class="why-name">${j.name}</div>
+              <div class="why-law">${j.law}</div>
+            </div>
+          </div>
+          ${noteHtml}
+          <div class="why-body">
+            <div class="why-col">
+              <div class="why-col-title">Motivation</div>
+              <p class="why-text">${j.motivation}</p>
+              <div class="why-drivers">
+                <div class="why-driver-group">
+                  <div class="why-driver-label" style="color:#2563eb">Political drivers</div>
+                  ${politicalHtml}
+                </div>
+                <div class="why-driver-group">
+                  <div class="why-driver-label" style="color:#2d8c4e">Economic drivers</div>
+                  ${economicHtml}
+                </div>
+              </div>
+            </div>
+            <div class="why-col">
+              <div class="why-col-title">Focusing event</div>
+              <div class="why-trigger">
+                <p class="why-text" style="font-style:italic">${j.trigger}</p>
+                <div class="why-pills">${pillsHtml}</div>
+              </div>
+              <div class="why-col-title" style="margin-top:1.2rem">Sources</div>
+              <div class="why-sources">${sourcesHtml}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="page-header reveal visible" style="border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:2.5rem">
+        <div>
+          <div class="why-eyebrow">Context & motivation</div>
+          <div class="page-title">Why did each jurisdiction<br>decide to regulate AI?</div>
+        </div>
+      </div>
+      ${blocksHtml}
+    `;
+  }
+
+  // ——— RENDER: HOW ———
+  function renderHow() {
+    const data = window.HOW_DATA;
+
+    const blocksHtml = data.map(j => {
+      const noteHtml = j.note ? `<div class="why-note">${j.note}</div>` : '';
+
+      const stepsHtml = (j.steps||[]).map(s => `
+        <div class="how-step">
+          <div class="how-step-num">${s.num}</div>
+          <div class="how-step-body">
+            <div class="how-step-title">${s.title}</div>
+            <div class="how-step-text">${s.text}</div>
+          </div>
+        </div>
+      `).join('');
+
+      const penaltiesHtml = (j.penalties||[]).map(p => {
+        const colorMap = { high: '#a32d2d', med: '#854f0b', low: '#2d8c4e', none: 'var(--gray)' };
+        return `
+          <div class="how-penalty">
+            <span class="how-penalty-label">${p.label}</span>
+            <span class="how-penalty-val" style="color:${colorMap[p.severity]||'var(--gray)'}">${p.value}</span>
+          </div>
+        `;
+      }).join('');
+
+      const sourcesHtml = (j.sources||[]).map(s =>
+        `<a class="why-source" href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label} ↗</a>`
+      ).join('');
+
+      return `
+        <div class="why-block">
+          <div class="why-block-header">
+            <div class="why-flag">${j.flag}</div>
+            <div>
+              <div class="why-name">${j.name}</div>
+              <div class="why-law">${j.law}</div>
+            </div>
+          </div>
+          ${noteHtml}
+          <div class="why-body">
+            <div class="why-col">
+              <div class="why-col-title">What companies must do</div>
+              <div class="how-steps">${stepsHtml}</div>
+            </div>
+            <div class="why-col">
+              <div class="why-col-title">Penalties & enforcement</div>
+              <div class="how-penalties">${penaltiesHtml}</div>
+              <div class="why-col-title" style="margin-top:1.5rem">Sources</div>
+              <div class="why-sources">${sourcesHtml}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="page-header reveal visible" style="border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:2.5rem">
+        <div>
+          <div class="why-eyebrow">Enforcement & compliance</div>
+          <div class="page-title">How does each law work<br>in practice?</div>
+        </div>
+      </div>
+      ${blocksHtml}
+    `;
+  }
+
   // ——— RENDER DISPATCHER ———
   function render() {
     const main = document.getElementById('main-content');
@@ -454,6 +595,8 @@
     else if (state.view==='fulltext') main.innerHTML = renderFullText();
     else if (state.view==='compare')  main.innerHTML = renderCompare();
     else if (state.view==='timeline') main.innerHTML = renderTimeline();
+    else if (state.view==='why')      main.innerHTML = renderWhy();
+    else if (state.view==='how')      main.innerHTML = renderHow();
     bindInnerEvents();
     updateSidebar();
     setupReveal();
@@ -578,10 +721,12 @@
 
   function bindTopNav() {
     const ne = document.getElementById('nav-explorer');
-    const nc = document.getElementById('nav-compare');
+    const nw = document.getElementById('nav-why');
+    const nh = document.getElementById('nav-how');
     const nt = document.getElementById('nav-timeline');
     if (ne) ne.addEventListener('click', e => { e.preventDefault(); navigate('overview','eu'); });
-    if (nc) nc.addEventListener('click', e => { e.preventDefault(); navigate('compare'); });
+    if (nw) nw.addEventListener('click', e => { e.preventDefault(); navigate('why'); });
+    if (nh) nh.addEventListener('click', e => { e.preventDefault(); navigate('how'); });
     if (nt) nt.addEventListener('click', e => { e.preventDefault(); navigate('timeline'); });
   }
 
