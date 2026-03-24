@@ -456,11 +456,11 @@
       ).join('');
 
       const politicalHtml = (j.political||[]).map(p =>
-        `<div class="why-point"><div class="why-point-dot" style="background:#2563eb"></div><span>${p}</span></div>`
+        `<div class="why-point"><div class="why-point-dot"></div><span>${p}</span></div>`
       ).join('');
 
       const economicHtml = (j.economic||[]).map(p =>
-        `<div class="why-point"><div class="why-point-dot" style="background:#2d8c4e"></div><span>${p}</span></div>`
+        `<div class="why-point"><div class="why-point-dot"></div><span>${p}</span></div>`
       ).join('');
 
       const sourcesHtml = (j.sources||[]).map(s =>
@@ -470,38 +470,40 @@
       const noteHtml = j.note ? `<div class="why-note">${j.note}</div>` : '';
 
       return `
-        <div class="why-block">
-          <div class="why-block-header">
-            <div class="why-flag">${j.flag}</div>
-            <div>
-              <div class="why-name">${j.name}</div>
-              <div class="why-law">${j.law}</div>
-            </div>
-          </div>
-          ${noteHtml}
-          <div class="why-body">
-            <div class="why-col">
-              <div class="why-col-title">Motivation</div>
-              <p class="why-text">${j.motivation}</p>
-              <div class="why-drivers">
-                <div class="why-driver-group">
-                  <div class="why-driver-label" style="color:#2563eb">Political drivers</div>
-                  ${politicalHtml}
-                </div>
-                <div class="why-driver-group">
-                  <div class="why-driver-label" style="color:#2d8c4e">Economic drivers</div>
-                  ${economicHtml}
-                </div>
+        <div class="why-block" data-j="${j.key}">
+          <div class="why-block-inner">
+            <div class="why-block-header">
+              <div class="why-flag">${j.flag}</div>
+              <div>
+                <div class="why-name">${j.name}</div>
+                <div class="why-law">${j.law}</div>
               </div>
             </div>
-            <div class="why-col">
-              <div class="why-col-title">Focusing event</div>
-              <div class="why-trigger">
-                <p class="why-text" style="font-style:italic">${j.trigger}</p>
-                <div class="why-pills">${pillsHtml}</div>
+            ${noteHtml}
+            <div class="why-body">
+              <div class="why-col">
+                <div class="why-col-title">Motivation</div>
+                <p class="why-text">${j.motivation}</p>
+                <div class="why-drivers">
+                  <div class="why-driver-group">
+                    <div class="why-driver-label">Political drivers</div>
+                    ${politicalHtml}
+                  </div>
+                  <div class="why-driver-group">
+                    <div class="why-driver-label">Economic drivers</div>
+                    ${economicHtml}
+                  </div>
+                </div>
               </div>
-              <div class="why-col-title" style="margin-top:1.2rem">Sources</div>
-              <div class="why-sources">${sourcesHtml}</div>
+              <div class="why-col">
+                <div class="why-col-title">Focusing event</div>
+                <div class="why-trigger">
+                  <p class="why-text" style="font-style:italic">${j.trigger}</p>
+                  <div class="why-pills">${pillsHtml}</div>
+                </div>
+                <div class="why-col-title" style="margin-top:1.2rem">Sources</div>
+                <div class="why-sources">${sourcesHtml}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -509,10 +511,10 @@
     }).join('');
 
     return `
-      <div class="page-header reveal visible" style="border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:2.5rem">
+      <div class="page-header reveal visible" style="border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:0">
         <div>
           <div class="why-eyebrow">Context & motivation</div>
-          <div class="page-title">Why did each jurisdiction<br>decide to regulate AI?</div>
+          <div class="page-title">Why AI regulation happened — any related focusing events?</div>
         </div>
       </div>
       ${blocksHtml}
@@ -536,40 +538,39 @@
         </div>
       `).join('');
 
-      const penaltiesHtml = (j.penalties||[]).map(p => {
-        const colorMap = { high: '#a32d2d', med: '#854f0b', low: '#2d8c4e', none: 'var(--gray)' };
-        return `
-          <div class="how-penalty">
-            <span class="how-penalty-label">${p.label}</span>
-            <span class="how-penalty-val" style="color:${colorMap[p.severity]||'var(--gray)'}">${p.value}</span>
-          </div>
-        `;
-      }).join('');
+      const penaltiesHtml = (j.penalties||[]).map(p => `
+        <div class="how-penalty">
+          <span class="how-penalty-label">${p.label}</span>
+          <span class="how-penalty-val">${p.value}</span>
+        </div>
+      `).join('');
 
       const sourcesHtml = (j.sources||[]).map(s =>
         `<a class="why-source" href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label} ↗</a>`
       ).join('');
 
       return `
-        <div class="why-block">
-          <div class="why-block-header">
-            <div class="why-flag">${j.flag}</div>
-            <div>
-              <div class="why-name">${j.name}</div>
-              <div class="why-law">${j.law}</div>
+        <div class="why-block" data-j="${j.key}">
+          <div class="why-block-inner">
+            <div class="why-block-header">
+              <div class="why-flag">${j.flag}</div>
+              <div>
+                <div class="why-name">${j.name}</div>
+                <div class="why-law">${j.law}</div>
+              </div>
             </div>
-          </div>
-          ${noteHtml}
-          <div class="why-body">
-            <div class="why-col">
-              <div class="why-col-title">What companies must do</div>
-              <div class="how-steps">${stepsHtml}</div>
-            </div>
-            <div class="why-col">
-              <div class="why-col-title">Penalties & enforcement</div>
-              <div class="how-penalties">${penaltiesHtml}</div>
-              <div class="why-col-title" style="margin-top:1.5rem">Sources</div>
-              <div class="why-sources">${sourcesHtml}</div>
+            ${noteHtml}
+            <div class="why-body">
+              <div class="why-col">
+                <div class="why-col-title">What companies must do</div>
+                <div class="how-steps">${stepsHtml}</div>
+              </div>
+              <div class="why-col">
+                <div class="why-col-title">Penalties & enforcement</div>
+                <div class="how-penalties">${penaltiesHtml}</div>
+                <div class="why-col-title" style="margin-top:1.5rem">Sources</div>
+                <div class="why-sources">${sourcesHtml}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -577,10 +578,10 @@
     }).join('');
 
     return `
-      <div class="page-header reveal visible" style="border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:2.5rem">
+      <div class="page-header reveal visible" style="border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:0">
         <div>
           <div class="why-eyebrow">Enforcement & compliance</div>
-          <div class="page-title">How does each law work<br>in practice?</div>
+          <div class="page-title">How do these laws <em style="font-family:'Playfair Display',serif;font-style:italic">actually</em> work?</div>
         </div>
       </div>
       ${blocksHtml}
