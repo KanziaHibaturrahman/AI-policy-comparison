@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>govern.ai — Global AI Law Explorer</title>
   <meta name="description" content="Read, compare, and track every official AI law enacted across jurisdictions — EU, South Korea, Vietnam, Kazakhstan, and Japan."/>
+  <meta name="theme-color" content="#fafaf8"/>
+  <meta property="og:title" content="govern.ai — Global AI Law Explorer"/>
+  <meta property="og:description" content="A single place to read, compare, and track official AI laws across jurisdictions."/>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursor-ring"></div>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <nav id="nav">
     <a class="nav-logo" href="#hero">govern<em>.ai</em></a>
@@ -20,12 +25,40 @@
       <li><a href="#" id="nav-why">Why?</a></li>
       <li><a href="#" id="nav-how">How?</a></li>
       <li><a href="#" id="nav-timeline">Timeline</a></li>
+      <li><a href="#" id="nav-methodology">Methodology</a></li>
     </ul>
+    <button class="mob-menu-btn" id="mob-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- Mobile drawer -->
+  <div class="mob-drawer" id="mob-drawer" aria-hidden="true">
+    <div class="mob-drawer-inner">
+      <div class="mob-section-label">Jurisdictions</div>
+      <a class="mob-item" href="#" data-view="overview" data-law="eu">🇪🇺 European Union</a>
+      <a class="mob-item" href="#" data-view="overview" data-law="kr">🇰🇷 South Korea</a>
+      <a class="mob-item" href="#" data-view="overview" data-law="vn">🇻🇳 Vietnam</a>
+      <a class="mob-item" href="#" data-view="overview" data-law="kz">🇰🇿 Kazakhstan</a>
+      <a class="mob-item" href="#" data-view="overview" data-law="jp">🇯🇵 Japan</a>
+      <div class="mob-section-label" style="margin-top:1.2rem">Views</div>
+      <a class="mob-item" href="#" data-view="why">Why?</a>
+      <a class="mob-item" href="#" data-view="how">How?</a>
+      <a class="mob-item" href="#" data-view="compare">Compare all</a>
+      <a class="mob-item" href="#" data-view="timeline">Timeline</a>
+      <a class="mob-item" href="#" data-view="methodology">Methodology</a>
+      <div class="mob-section-label" style="margin-top:1.2rem">Coming soon</div>
+      <span class="mob-coming">🇺🇸 United States</span>
+      <span class="mob-coming">🇬🇧 United Kingdom</span>
+      <span class="mob-coming">🇨🇳 China · 🇨🇦 Canada · 🇧🇷 Brazil</span>
+      <a class="mob-request" href="mailto:hello@govern.ai">+ Request a jurisdiction</a>
+    </div>
+  </div>
+  <div class="mob-overlay" id="mob-overlay"></div>
 
   <section id="hero">
     <div class="hero-left">
-      <p class="hero-tag">Global AI Legislation Tracker</p>
+      <p class="hero-tag"><span class="hero-live-dot"></span>Live · Primary sources · Updated March 2026</p>
       <h1 class="hero-headline">
         The world is writing<br><em>AI law.</em><br>Read every word.
       </h1>
@@ -35,6 +68,10 @@
       <div class="hero-ctas">
         <a href="#explorer" class="btn btn-solid" data-nav="overview" data-law="eu">Explore laws</a>
         <a href="#" class="btn btn-outline" data-nav="compare">Compare all</a>
+      </div>
+      <div class="hero-notice">
+        <span class="hero-notice-icon">!</span>
+        <span>5 jurisdictions live now. US, UK, China, Canada &amp; Brazil coming soon. <a href="mailto:hello@govern.ai" class="hero-notice-link">Request one →</a></span>
       </div>
     </div>
     <div class="hero-right">
@@ -62,6 +99,15 @@
       <a class="nav-item" href="#" data-view="overview" data-law="vn"><span class="nav-flag">🇻🇳</span> Vietnam</a>
       <a class="nav-item" href="#" data-view="overview" data-law="kz"><span class="nav-flag">🇰🇿</span> Kazakhstan</a>
       <a class="nav-item" href="#" data-view="overview" data-law="jp"><span class="nav-flag">🇯🇵</span> Japan</a>
+      <div class="sidebar-coming">
+        <div class="sidebar-coming-label">Coming soon</div>
+        <span class="sidebar-coming-item">🇺🇸 United States</span>
+        <span class="sidebar-coming-item">🇬🇧 United Kingdom</span>
+        <span class="sidebar-coming-item">🇨🇳 China</span>
+        <span class="sidebar-coming-item">🇨🇦 Canada</span>
+        <span class="sidebar-coming-item">🇧🇷 Brazil</span>
+        <a class="sidebar-request" href="mailto:hello@govern.ai">+ Request a jurisdiction</a>
+      </div>
 
       <div class="sidebar-section">Views</div>
       <a class="nav-item" href="#" data-view="why">
@@ -89,6 +135,12 @@
         </svg>
         Timeline
       </a>
+      <a class="nav-item" href="#" data-view="methodology">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M2 4h12M2 8h8M2 12h5"/><circle cx="13" cy="11" r="2.5"/><path d="M15 13l1.5 1.5"/>
+        </svg>
+        Methodology
+      </a>
     </aside>
 
     <main class="main-content" id="main-content"></main>
@@ -96,8 +148,11 @@
 
   <footer>
     <span>govern.ai — Global AI Law Explorer</span>
-    <span>Data current as of March 2026</span>
-    <a href="https://github.com/KanziaHibaturrahman/AI-policy-comparison" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    <span>Data current as of March 2026 · Not legal advice · Primary sources only</span>
+    <div style="display:flex;gap:1.5rem;align-items:center;">
+      <a href="#" id="footer-methodology" onclick="event.preventDefault();document.querySelector('[data-view=methodology]').click()">Methodology</a>
+      <a href="https://github.com/KanziaHibaturrahman/AI-policy-comparison" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </div>
   </footer>
 
   <script src="data/eu.js"></script>
