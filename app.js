@@ -270,7 +270,7 @@
       `<a class="toc-item ${i===0?'active':''}" href="#chapter-${i}" data-ch="${i}">${ch.chapter}</a>`
     ).join('');
     const bodyHtml = l.fulltext.map((ch, i) => `
-      <div id="chapter-${i}">
+      <div id="chapter-${i}" class="law-chapter-block">
         <div class="law-chapter">${ch.chapter}</div>
         ${ch.articles.map(a => `
           <div class="law-article-num">${a.num}</div>
@@ -293,6 +293,10 @@
         </div>
         <a href="${l.docs[0].url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="white-space:nowrap">Official source ↗</a>
       </div>
+      <div class="ft-search-wrap">
+        <input class="ft-search" id="ft-search" type="search" placeholder="Search articles…" autocomplete="off" spellcheck="false"/>
+        <span class="ft-search-count" id="ft-search-count"></span>
+      </div>
       <div class="text-view">
         <div class="text-toc">
           <div class="toc-title">Contents</div>
@@ -302,7 +306,7 @@
             <a class="toc-item" href="${l.docs[0].url}" target="_blank" rel="noopener noreferrer" style="color:var(--blue)">Official document ↗</a>
           </div>
         </div>
-        <div class="law-body">${bodyHtml}</div>
+        <div class="law-body" id="law-body">${bodyHtml}</div>
       </div>
     `;
   }
@@ -372,18 +376,24 @@
           <div class="filter-chip ${filter==='penalties'?'on':''}" data-filter="penalties">Penalties</div>
         </div>
       </div>
-      <div class="country-headers">
-        <div class="ch-blank"><span>Dimension</span></div>
-        ${heads.map(h=>`
-          <div class="ch-card">
-            <div class="ch-flag">${h.flag}</div>
-            <div class="ch-name">${h.name}</div>
-            <div class="ch-year">${h.year}</div>
-            <div class="ch-approach ${AP_MAP[h.ap][0]}">${AP_MAP[h.ap][1]}</div>
-          </div>
-        `).join('')}
+      <div class="compare-meta-row">
+        <span class="compare-source-footer">Sources: EUR-Lex, OECD AI Policy Observatory, official government publications &mdash; <a href="#" onclick="event.preventDefault();navigate('methodology')">view methodology</a></span>
+        <span class="compare-scroll-hint">← scroll →</span>
       </div>
-      <div class="ctable">${tableHtml}</div>
+      <div class="compare-table-outer">
+        <div class="country-headers">
+          <div class="ch-blank"><span>Dimension</span></div>
+          ${heads.map(h=>`
+            <div class="ch-card">
+              <div class="ch-flag">${h.flag}</div>
+              <div class="ch-name">${h.name}</div>
+              <div class="ch-year">${h.year}</div>
+              <div class="ch-approach ${AP_MAP[h.ap][0]}">${AP_MAP[h.ap][1]}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="ctable">${tableHtml}</div>
+      </div>
       <div style="margin-top:2.5rem">
         <div class="section-header"><div class="section-title">Jurisdiction profiles</div><div class="section-line"></div></div>
         <div class="profile-grid">${profileCards}</div>
@@ -396,8 +406,8 @@
     const events = window.TIMELINE_EVENTS;
     const lanes = ['European Union','South Korea','Vietnam','Kazakhstan','Japan'];
     const laneFlags = {'European Union':'🇪🇺','South Korea':'🇰🇷','Vietnam':'🇻🇳','Kazakhstan':'🇰🇿','Japan':'🇯🇵'};
-    const START = new Date('2024-07-01');
-    const END   = new Date('2026-12-01');
+    const START = new Date('2024-06-01');
+    const END   = new Date('2027-02-01');
     const totalMonths = (END.getFullYear()-START.getFullYear())*12 + END.getMonth()-START.getMonth();
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -588,6 +598,71 @@
     `;
   }
 
+  // ——— RENDER: METHODOLOGY ———
+  function renderMethodology() {
+    return `
+      <div class="page-header reveal visible" style="border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:2.5rem">
+        <div>
+          <div class="why-eyebrow">Transparency</div>
+          <div class="page-title">How we collect &amp; verify data</div>
+          <div class="page-sub">Methodology, sourcing policy, and legal disclaimer for govern.ai</div>
+        </div>
+      </div>
+
+      <div class="meth-grid">
+        <div class="meth-card">
+          <div class="meth-card-title">Primary sources only</div>
+          <p class="meth-text">All legislation is sourced directly from official government portals, legal gazettes, and parliament websites. We do not aggregate from news coverage or secondary legal databases — only first-party texts.</p>
+        </div>
+        <div class="meth-card">
+          <div class="meth-card-title">Monthly update cadence</div>
+          <p class="meth-text">Each jurisdiction is reviewed monthly. When a law is amended or implementing regulations are published, the record is updated within 14 days of official gazette publication.</p>
+        </div>
+        <div class="meth-card">
+          <div class="meth-card-title">Translation disclaimer</div>
+          <p class="meth-text">Non-English legislation (Vietnam, Kazakhstan, Japan, South Korea) is machine-translated and reviewed by a human analyst. Translations are indicative — not legally authoritative. Always consult original texts.</p>
+        </div>
+        <div class="meth-card">
+          <div class="meth-card-title">OECD framework alignment</div>
+          <p class="meth-text">The 15 comparison dimensions are based on the OECD AI Policy Observatory framework, ensuring categories are internationally recognised and consistent across jurisdictions.</p>
+        </div>
+      </div>
+
+      <div class="section-header" style="margin-top:2.5rem"><div class="section-title">Primary sources by jurisdiction</div><div class="section-line"></div></div>
+      <div class="sources-block">
+        <div class="source-row">
+          <span class="source-badge">EU</span>
+          <span class="source-desc">EUR-Lex — Regulation (EU) 2024/1689 (AI Act)</span>
+          <a class="source-link" href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener noreferrer">View source ↗</a>
+        </div>
+        <div class="source-row">
+          <span class="source-badge">KR</span>
+          <span class="source-desc">National Law Information Center — AI Basic Act (2024)</span>
+          <a class="source-link" href="https://www.law.go.kr" target="_blank" rel="noopener noreferrer">View source ↗</a>
+        </div>
+        <div class="source-row">
+          <span class="source-badge">VN</span>
+          <span class="source-desc">Vietnam Official Gazette — Decree No. 13/2023/ND-CP</span>
+          <a class="source-link" href="https://thuvienphapluat.vn" target="_blank" rel="noopener noreferrer">View source ↗</a>
+        </div>
+        <div class="source-row">
+          <span class="source-badge">KZ</span>
+          <span class="source-desc">Adilet Legal System — Digital Development Act + AI Strategy 2024–2029</span>
+          <a class="source-link" href="https://adilet.zan.kz" target="_blank" rel="noopener noreferrer">View source ↗</a>
+        </div>
+        <div class="source-row">
+          <span class="source-badge">JP</span>
+          <span class="source-desc">METI — AI Guidelines for Business (April 2024)</span>
+          <a class="source-link" href="https://www.meti.go.jp/english/press/2024/0419_002.html" target="_blank" rel="noopener noreferrer">View source ↗</a>
+        </div>
+      </div>
+
+      <div class="meth-disclaimer">
+        <strong>Legal disclaimer:</strong> This tool is for informational purposes only and does not constitute legal advice. Information may be incomplete or out of date. Always consult the original legislation and qualified legal counsel for compliance decisions.
+      </div>
+    `;
+  }
+
   // ——— RENDER DISPATCHER ———
   function render() {
     const main = document.getElementById('main-content');
@@ -598,8 +673,10 @@
     else if (state.view==='timeline') main.innerHTML = renderTimeline();
     else if (state.view==='why')      main.innerHTML = renderWhy();
     else if (state.view==='how')      main.innerHTML = renderHow();
+    else if (state.view==='methodology') main.innerHTML = renderMethodology();
     bindInnerEvents();
     updateSidebar();
+    updateTopNav();
     setupReveal();
   }
 
@@ -691,10 +768,72 @@
       dot.addEventListener('mousemove', e => positionTooltip(e, document.getElementById('gov-tooltip')));
       dot.addEventListener('mouseleave', hideTooltip);
     });
+
+    // ——— FULL-TEXT SEARCH ———
+    const ftSearch = document.getElementById('ft-search');
+    const ftCount  = document.getElementById('ft-search-count');
+    if (ftSearch) {
+      ftSearch.addEventListener('input', () => {
+        const q = ftSearch.value.trim().toLowerCase();
+        const body = document.getElementById('law-body');
+        if (!body) return;
+        // Remove existing highlights
+        body.querySelectorAll('mark.ft-hl').forEach(m => {
+          m.replaceWith(document.createTextNode(m.textContent));
+        });
+        body.normalize();
+        if (!q) { ftCount.textContent = ''; return; }
+        // Walk text nodes and highlight
+        let count = 0;
+        const walk = node => {
+          if (node.nodeType === 3) {
+            const idx = node.textContent.toLowerCase().indexOf(q);
+            if (idx === -1) return;
+            const mark = document.createElement('mark');
+            mark.className = 'ft-hl';
+            const after = node.splitText(idx);
+            after.splitText(q.length);
+            mark.textContent = after.textContent;
+            after.replaceWith(mark);
+            count++;
+          } else if (node.nodeType === 1 && !['SCRIPT','STYLE'].includes(node.tagName)) {
+            [...node.childNodes].forEach(walk);
+          }
+        };
+        walk(body);
+        ftCount.textContent = count ? `${count} match${count===1?'':'es'}` : 'No matches';
+        // Scroll to first match
+        const first = body.querySelector('mark.ft-hl');
+        if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+      });
+    }
+
+    // ——— TOC SCROLLSPY ———
+    const lawBody = document.getElementById('law-body');
+    if (lawBody) {
+      const chapters = lawBody.querySelectorAll('.law-chapter-block');
+      if (chapters.length) {
+        const spyObs = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id;
+              document.querySelectorAll('.toc-item[data-ch]').forEach(t => {
+                t.classList.toggle('active', t.dataset.ch === id.replace('chapter-',''));
+              });
+            }
+          });
+        }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+        chapters.forEach(ch => spyObs.observe(ch));
+      }
+    }
   }
 
   function updateSidebar() {
     document.querySelectorAll('.sidebar .nav-item[data-view]').forEach(el => {
+      el.classList.remove('active');
+      if (el.dataset.view===state.view && (!el.dataset.law || el.dataset.law===state.law)) el.classList.add('active');
+    });
+    document.querySelectorAll('.mob-item[data-view]').forEach(el => {
       el.classList.remove('active');
       if (el.dataset.view===state.view && (!el.dataset.law || el.dataset.law===state.law)) el.classList.add('active');
     });
@@ -725,10 +864,12 @@
     const nw = document.getElementById('nav-why');
     const nh = document.getElementById('nav-how');
     const nt = document.getElementById('nav-timeline');
+    const nm = document.getElementById('nav-methodology');
     if (ne) ne.addEventListener('click', e => { e.preventDefault(); navigate('overview','eu'); });
     if (nw) nw.addEventListener('click', e => { e.preventDefault(); navigate('why'); });
     if (nh) nh.addEventListener('click', e => { e.preventDefault(); navigate('how'); });
     if (nt) nt.addEventListener('click', e => { e.preventDefault(); navigate('timeline'); });
+    if (nm) nm.addEventListener('click', e => { e.preventDefault(); navigate('methodology'); });
   }
 
   function bindHeroCtas() {
@@ -764,8 +905,79 @@
     });
   }
 
+  function bindMobileMenu() {
+    const btn     = document.getElementById('mob-menu-btn');
+    const drawer  = document.getElementById('mob-drawer');
+    const overlay = document.getElementById('mob-overlay');
+    if (!btn || !drawer) return;
+
+    function openDrawer() {
+      btn.classList.add('open');
+      btn.setAttribute('aria-expanded','true');
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden','false');
+      overlay.classList.add('visible');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden','true');
+      overlay.classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', () => btn.classList.contains('open') ? closeDrawer() : openDrawer());
+    overlay.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+    drawer.querySelectorAll('.mob-item[data-view]').forEach(el => {
+      el.addEventListener('click', e => {
+        e.preventDefault();
+        closeDrawer();
+        navigate(el.dataset.view, el.dataset.law || null);
+      });
+    });
+  }
+
+  function updateTopNav() {
+    const navMap = {
+      overview: 'nav-explorer', fulltext: 'nav-explorer',
+      why: 'nav-why', how: 'nav-how',
+      timeline: 'nav-timeline', methodology: 'nav-methodology',
+      compare: 'nav-explorer',
+    };
+    document.querySelectorAll('.nav-links a[id]').forEach(a => a.removeAttribute('data-active'));
+    const activeId = navMap[state.view];
+    if (activeId) {
+      const el = document.getElementById(activeId);
+      if (el) el.setAttribute('data-active','true');
+    }
+  }
+
+  function animateHeroStats() {
+    document.querySelectorAll('.hero-stat-num').forEach(el => {
+      const target = parseInt(el.textContent.replace(/\D/g, ''), 10);
+      if (isNaN(target)) return;
+      const suffix = el.textContent.replace(/[\d]/g, '');
+      const duration = 900;
+      const start = performance.now();
+      const from = Math.max(0, target - (target > 100 ? 80 : target > 10 ? 8 : 2));
+      function tick(now) {
+        const p = Math.min(1, (now - start) / duration);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(from + (target - from) * ease) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = target + suffix;
+      }
+      // Delay start until element is visible (hero animation plays first)
+      setTimeout(() => requestAnimationFrame(tick), 700);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
-    initCursor(); bindScrollNav(); bindSidebar(); bindTopNav(); bindHeroCtas(); render(); setupReveal();
+    initCursor(); bindScrollNav(); bindSidebar(); bindTopNav(); bindHeroCtas(); bindMobileMenu(); render(); setupReveal(); animateHeroStats();
   });
 
 })();
